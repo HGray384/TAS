@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' @export\n\n# BMA implementation\n\ntaShrink <- function(X, targets=\"default\",  without=0,\n                     alpha = seq(0.1, 0.9, 0.1), plots = TRUE, ext.data=FALSE)\n{\n  # enter targets as an array with the third dimension\n  # indicating the target number\n\n  ## initialise useful values\n  n <- ncol(X)\n  p <- nrow(X)\n\n  ## center the data.. crucial\n  X <- as.matrix(X)\n  X <- t(scale(t(X), scale=F, center=T))\n  S <- tcrossprod(X)/n\n\n\n  if (is.character(targets) && targets == \"default\")\n  {\n    models <- array(0, dim = c(p, p, 9))\n    if(!ext.data){\n      models[,,1] <- diag(p)\n      models[,,2] <- getTarget(X, var=\"eq\", cor=\"id\")\n      models[,,3] <- getTarget(X, var=\"un\", cor=\"id\")\n      models[,,4] <- getTarget(X, var=\"id\", cor=\"cc\")\n      models[,,5] <- getTarget(X, var=\"eq\", cor=\"cc\")\n      models[,,6] <- getTarget(X, var=\"un\", cor=\"cc\")\n      models[,,7] <- getTarget(X, var=\"id\", cor=\"arc\")\n      models[,,8] <- getTarget(X, var=\"eq\", cor=\"arc\")\n      models[,,9] <- getTarget(X, var=\"un\", cor=\"arc\")\n      }else{\n      ext.data <- as.matrix(ext.data)\n      models[,,1] <- diag(p)\n      models[,,2] <- getTarget(ext.data, var=\"eq\", cor=\"id\")\n      models[,,3] <- getTarget(ext.data, var=\"un\", cor=\"id\")\n      models[,,4] <- getTarget(ext.data, var=\"id\", cor=\"cc\")\n      models[,,5] <- getTarget(ext.data, var=\"eq\", cor=\"cc\")\n      models[,,6] <- getTarget(ext.data, var=\"un\", cor=\"cc\")\n      models[,,7] <- getTarget(ext.data, var=\"id\", cor=\"arc\")\n      models[,,8] <- getTarget(ext.data, var=\"eq\", cor=\"arc\")\n      models[,,9] <- getTarget(ext.data, var=\"un\", cor=\"arc\")\n    }\n  }\n  else\n  {\n    models <- targets\n  }\n\n  if (length(without) > 1)\n  {\n    models <- models[,,-without]\n  }\n\n  # ntargets <- dim(models)[3]\n\n  ## compute the estimate\n  logmargs <- t(apply(models, 3, function(x){logML(X, x, alpha)}))\n\n  weights <- exp(logmargs - matrixStats::logSumExp(logmargs))\n\n  shrinkageweights <- weights%*%alpha\n  sweight <- 1-sum(shrinkageweights)\n  shrinkageweights <- simplify2array(lapply(shrinkageweights, function(x){matrix(x, p, p)}))\n  sigmahat <- shrinkageweights*models\n\n  sigmahat <- apply(sigmahat, c(1,2), sum)\n  sigmahat <- sigmahat + (sweight*S)\n\n\n\n#   ## output handling\n#   # control flow variables\n#   vars <- 1\n#   cors <- 1\n#   structs <- rep(0, ntargets)\n#   variances <- c(\"unit\", \"mean\", \"sample\")\n#   correlations <- c(\"zero\", \"mean\", \"auto-regressive\")\n#\n#   for (m in 1:ntargets)\n#   {\n#     if (targets == \"default\")\n#     {\n#       structs[m] <- paste(\"Target \", m, \" Variances: \", variances[vars], \" Correlations: \", correlations[cors])\n#     }\n#     else\n#     {\n#       structs <- paste(\"Target \", m)\n#     }\n#     print(structs[m])\n#     print(paste(\"Alpha: \", alpha, \" Normalised marginal: \", weights[m,]))\n#     if (vars == 3)\n#     {\n#       vars <- 0\n#       cors <- cors + 1\n#     }\n#     vars <- vars + 1\n#   }\n  if (plots){\n  barplot(rowSums(weights)/sum(weights), names.arg = 1:dim(models)[3], main = \"Distribution of target weights\",\n          col = rainbow(dim(models)[3]), space = 0, xlab = \"Target\", ylab = \"Weight\")\n  }\n\n  list(\"sigmahat\" = sigmahat, \"targets\" = models, \"weights\" = weights, \"logmarginals\" = logmargs)\n}\n",
+    "created" : 1491320528027.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2313020022",
+    "id" : "36AFAB06",
+    "lastKnownWriteTime" : 1491394899,
+    "last_content_update" : 1491394899852,
+    "path" : "~/R/packages/TAS/R/taShrink.R",
+    "project_path" : "R/taShrink.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "p <- c(1000, 2000, 3000)\nn <- c(250, 500, 750)\n\n# dimensions are t[n,p,r]\nt <- replicate(100, simplify2array(lapply(p, function(y){Sigma <- diag(y);\nsapply(n, function(x){X <- mvtnorm:::rmvnorm(x, rep(0, y), Sigma);\nX <- t(scale(X, center=TRUE, scale=TRUE));\nreturn(system.time(taShrink(X, plots=F))[3])})})))\n\nt <- apply(t, c(1, 2), mean)\nrownames(t) <- sapply(n, function(x){paste(\"n=\", x, sep = \"\")})\ncolnames(t) <- sapply(p, function(x){paste(\"p=\", x, sep = \"\")})\nsave(t, file=\"~/R/scripts/times\")\n",
+    "created" : 1491396956213.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "960264275",
+    "id" : "6272659A",
+    "lastKnownWriteTime" : 1491571024,
+    "last_content_update" : 1491571283541,
+    "path" : "~/R/scripts/BMA/timing.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

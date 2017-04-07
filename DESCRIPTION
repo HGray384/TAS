@@ -1,0 +1,15 @@
+Package: TAS
+Type: Package
+Title: Target-Averaged linear Shrinkage estimation
+Version: 0.1.0
+Author: Harry Gray
+Maintainer: Harry Gray <harry.gray@mrc-bsu.cam.ac.uk>
+Depends:
+    matrixStats,
+    stats,
+    graphics,
+    grDevices
+Description: High-dimensional covariance matrix estimation
+License: GPL (>= 2)
+LazyData: TRUE
+RoxygenNote: 5.0.1
