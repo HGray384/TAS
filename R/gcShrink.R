@@ -1,17 +1,15 @@
-#' @export
-
 gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9, 0.1),
                      plots = TRUE, weighted=FALSE, ext.data=FALSE)
 {
   ## initialise useful values
   n <- ncol(X)
-
+  
   ## center the data.. crucial
   X <- as.matrix(X)
   X <- t(scale(t(X), scale=F, center=T))
   S <- tcrossprod(X)/n
-
-
+  
+  
   # if target not specified
   if (is.character(target) && target=="none")
   {
@@ -25,19 +23,19 @@ gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9
       target <- getTarget(ext.data, var, cor)
     }
   }
-
+  
   # compute log marginals
   logmarg <- logML(X, target, alpha)
-
+  
   # max of these gives optimal alpha
   optimalpha <- alpha[which(logmarg==max(logmarg))]
   if (plots){
     plot(alpha, logmarg, col = 'blue', pch = 16,
-       ylab = "log marginal likelihoods", xlab = expression(alpha))
-
+         ylab = "log marginal likelihoods", xlab = expression(alpha))
+    
     lines(x = rep(optimalpha, 2), y = c(min(logmarg), max(logmarg)), col='red')
   }
-
+  
   # compute the estimate
   if (weighted==FALSE){
     # put all weight on alpha with highest log marginal
@@ -48,7 +46,7 @@ gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9
     weights <- alpha*marg
     sigmahat <- ((1-sum(weights))*S) + (sum(weights)*target)
   }
-
+  
   # # compute the variance for each individual element of sigmahat
   # # parameters
   # nu <- (optimalpha/(1-optimalpha)) + p + 1
@@ -65,7 +63,7 @@ gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9
   # # Divide all of these by the denominator of the variances
   # denvar <- (nu - p)*((nu - p - 1)^2)*(nu - p - 3)
   # variances <- variances/denvar
-
+  
   # return the estimated matrix, the optimal shrinkage intrensity,
   # the sample covariance matrix and the matrix of element-wise variances
   list("sigmahat" = sigmahat, "optimalpha" = optimalpha, "samplecov" = S,
