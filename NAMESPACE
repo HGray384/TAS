@@ -1,3 +1,6 @@
 useDynLib(TAS, .registration=TRUE)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
+importFrom("grDevices", "rainbow")
+importFrom("graphics", "barplot", "lines", "plot")
+importFrom("matrixStats", "logSumExp")

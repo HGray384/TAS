@@ -7,5 +7,5 @@ Author: Harry Gray
 Maintainer: Harry Gray <harry.gray@mrc-bsu.cam.ac.uk>
 Description: High-dimensional covariance matrix estimation.
 License: GPL (>= 2)
-Imports: Rcpp (>= 0.12.13)
+Imports: Rcpp (>= 0.12.13), matrixStats
 LinkingTo: Rcpp, RcppArmadillo
