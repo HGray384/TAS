@@ -6,6 +6,30 @@
 
 using namespace Rcpp;
 
+// getTarget
+arma::mat getTarget(arma::mat X, int varNumber, int corNumber);
+RcppExport SEXP _TAS_getTarget(SEXP XSEXP, SEXP varNumberSEXP, SEXP corNumberSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type varNumber(varNumberSEXP);
+    Rcpp::traits::input_parameter< int >::type corNumber(corNumberSEXP);
+    rcpp_result_gen = Rcpp::wrap(getTarget(X, varNumber, corNumber));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getTargetSet
+arma::cube getTargetSet(arma::mat X);
+RcppExport SEXP _TAS_getTargetSet(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(getTargetSet(X));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logML
 arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha);
 RcppExport SEXP _TAS_logML(SEXP XSEXP, SEXP targetSEXP, SEXP alphaSEXP) {
@@ -21,6 +45,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_TAS_getTarget", (DL_FUNC) &_TAS_getTarget, 3},
+    {"_TAS_getTargetSet", (DL_FUNC) &_TAS_getTargetSet, 1},
     {"_TAS_logML", (DL_FUNC) &_TAS_logML, 3},
     {NULL, NULL, 0}
 };

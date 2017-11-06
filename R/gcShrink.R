@@ -1,13 +1,13 @@
-gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9, 0.1),
+gcShrink <- function(X, target="none", var=2, cor=1, alpha = seq(0.01, 0.99, 0.01),
                      plots = TRUE, weighted=FALSE, ext.data=FALSE)
 {
-  ## initialise useful values
+  # data dimensions
   n <- ncol(X)
+  # p <- nrow(X)
   
-  ## center the data.. crucial
+  ## center the data
   X <- as.matrix(X)
   X <- t(scale(t(X), scale=F, center=T))
-  S <- tcrossprod(X)/n
   
   
   # if target not specified
@@ -39,12 +39,12 @@ gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9
   # compute the estimate
   if (weighted==FALSE){
     # put all weight on alpha with highest log marginal
-    sigmahat <- ((1 - optimalpha) * S) + (optimalpha * target)
+    sigmahat <- ((1 - optimalpha) * tcrossprod(X)/n) + (optimalpha * target)
   } else {
     # weight each value of alpha
     marg <- exp(logmarg - matrixStats::logSumExp(logmarg))
     weights <- alpha*marg
-    sigmahat <- ((1-sum(weights))*S) + (sum(weights)*target)
+    sigmahat <- ((1-sum(weights))*tcrossprod(X)/n) + (sum(weights)*target)
   }
   
   # # compute the variance for each individual element of sigmahat
@@ -66,7 +66,7 @@ gcShrink <- function(X, target="none", var="eq", cor="id", alpha = seq(0.1,  0.9
   
   # return the estimated matrix, the optimal shrinkage intrensity,
   # the sample covariance matrix and the matrix of element-wise variances
-  list("sigmahat" = sigmahat, "optimalpha" = optimalpha, "samplecov" = S,
+  list("sigmahat" = sigmahat, "optimalpha" = optimalpha,
        "target"= target,
        #"variances"=variances,
        "logmarg" = logmarg)
