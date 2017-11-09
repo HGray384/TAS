@@ -1,2 +1,47 @@
 [
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/home/harry/R/TAS/src/getTarget.cpp",
+                "kind" : 6,
+                "line" : 6,
+                "name" : "getTarget(arma::mat, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@getTarget#$@N@arma@C@Mat>#d#I#I#"
+            }
+        ],
+        "file" : "/home/harry/R/TAS/src/getTarget.cpp",
+        "file_last_write" : 1510218666
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 12,
+                "file" : "/home/harry/R/TAS/src/getTargetSet.cpp",
+                "kind" : 6,
+                "line" : 6,
+                "name" : "getTargetSet(arma::mat)",
+                "parent_name" : "",
+                "usr" : "c:@F@getTargetSet#$@N@arma@C@Mat>#d#"
+            }
+        ],
+        "file" : "/home/harry/R/TAS/src/getTargetSet.cpp",
+        "file_last_write" : 1510218666
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 11,
+                "file" : "/home/harry/R/TAS/src/logML.cpp",
+                "kind" : 6,
+                "line" : 6,
+                "name" : "logML(arma::mat, arma::mat, arma::vec)",
+                "parent_name" : "",
+                "usr" : "c:@F@logML#$@N@arma@C@Mat>#d#S0_#$@N@arma@C@Col>#d#"
+            }
+        ],
+        "file" : "/home/harry/R/TAS/src/logML.cpp",
+        "file_last_write" : 1510218666
+    }
 ]
