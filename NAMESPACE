@@ -1,4 +1,4 @@
-useDynLib(TAS, .registration=TRUE)
+useDynLib(TAS)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
 importFrom("grDevices", "rainbow")
