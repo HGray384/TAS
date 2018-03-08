@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 getTarget <- function(X, varNumber = 2L, corNumber = 1L) {
-    .Call(`_TAS_getTarget`, X, varNumber, corNumber)
+    .Call('_TAS_getTarget', PACKAGE = 'TAS', X, varNumber, corNumber)
 }
 
 getTargetSet <- function(X) {
-    .Call(`_TAS_getTargetSet`, X)
+    .Call('_TAS_getTargetSet', PACKAGE = 'TAS', X)
 }
 
 logML <- function(X, target, alpha) {
-    .Call(`_TAS_logML`, X, target, alpha)
+    .Call('_TAS_logML', PACKAGE = 'TAS', X, target, alpha)
 }
 
