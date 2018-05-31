@@ -61,6 +61,42 @@
 taShrink <- function(X, targets="default",  without=0,
                      alpha = seq(0.01, 0.99, 0.01), plots = TRUE, ext.data=FALSE)
 {
+  if(!is.numeric(X)){
+    message("The data matrix must be numeric!")
+    stop()
+  }
+  if(targets!="default" || !is.array(targets)){
+    message("The targets must be either 'default' or an array!")
+    stop()
+  }
+  if(!is.numeric(without)){
+    message("'without' must be numeric!")
+    stop()
+  }
+  if(!is.numeric(alpha)){
+    message("The shrinkage parameters 'alpha' must be numeric!")
+    stop()
+  }
+  if(any(alpha<=0) || any(alpha>=1)){
+    message("The shrinkage parameters must be within, and not inclusive of, (0, 1)!")
+    stop()
+  }
+  if(!is.logical(plots)){
+    message("'plots' must TRUE or FALSE!")
+    stop()
+  }
+  if(is.logical(ext.data)){
+    if(ext.data){
+     message("Instead of entering ext.data=TRUE,
+             set ext.data to be your external data matrix")
+      stop()
+    }
+  }else if(!is.numeric(ext.data)){
+    message("ext.data should either be your external 
+            data matrix, or FALSE")
+    stop()
+  }
+  
   # data dimensions
   n <- ncol(X)
   p <- nrow(X)
