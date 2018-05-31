@@ -9,3 +9,9 @@ for potentially greater estimation accuracy. The model weighting procedure elimi
 target matrix, which is the case in standard linear shrinkage.
 
 See documentation files for information on the usage of TAS.
+
+This version can be directly installed from the R console using:
+
+install.packages('devtools')
+library('devtools')
+install_github('HGray384/TAS')
