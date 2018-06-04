@@ -3,7 +3,7 @@
 \alias{TAS}
 \docType{package}
 \title{
-  Target-Averaged linear Shrinkage estimation
+  Target-Averaged Linear Shrinkage estimation
 }
 \description{
   Conjugate Bayesian covariance matrix estimation using linear shrinkage with multiple target matrices (Gray et al, submitted). Most useful in high-dimensional data settings, where the number of variables is greater than the number of samples.
