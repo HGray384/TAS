@@ -1,7 +1,31 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
-
+//' Log-marginal likelihood of a Gaussian-inverse Wishart
+//' conjugate model
+//' 
+//' Evaluate the log-marginal likelihood of a Gaussian-inverse Wishart
+//' distribution parametrised in terms of its prior mean matrix and its
+//' prior variance parameter. In the Bayesian linear shrinkage model,
+//' these parameters correspond to the target matrix and the shrinkage
+//' intensity (Hannart and Naveau, 2014). 
+//' 
+//' 
+//' @param X \code{matrix} --data matrix with variables in rows and 
+//' observations in columns.
+//' @param target \code{matrix} -- prior mean matrix parameter of the
+//' inverse-Wishart distribution. 
+//' @param alpha \code{numeric} -- prior variance parameter of the
+//' inverse-Wishart distribution. 
+//' @return \code{numeric} -- log-marginal likelihood evaluated at
+//'  (\code{target}, \code{alpha}). If \code{alpha} is a vector is a vector
+//'  then the function returns a vector evaluated at each element of 
+//'  \code{alpha}.
+//'
+//' @references Alexis Hannart and Philippe Naveau (2014). 
+//' Estimating high dimensional covariance matrices: 
+//' A new look at the Gaussian conjugate framework. 
+//' Journal of Multivariate Analysis.
 // [[Rcpp::export]]
 arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha) {
   

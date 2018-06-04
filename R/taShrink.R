@@ -1,8 +1,9 @@
 #' Bayesian Target-Averaged linear Shrinkage (TAS) covariance estimator 
 #' 
 #' Implements a Bayesian target-averaged linear shrinkage covariance estimator
-#' as in (Gray et al 2018). It is most useful when the observed data is 
-#' high-dimensional (more variables than observations) and there are other 
+#' as in Gray et al (submitted) (pre-print available upon request).
+#' It is most useful when the observed data is high-dimensional 
+#' (more variables than observations) and there are other 
 #' datasets that can be used to include as prior data-driven targets to shrink 
 #' towards.
 #'
@@ -11,7 +12,8 @@
 #' variables than observations.
 #' @param targets \code{character} or \code{array} -- "default" creates 
 #' a target set of common literature targets, or the user may specify an array
-#' of targets to use, e.g. ones that have been derived from external data.
+#' of targets to use, e.g. ones that have been derived from external data. All
+#' targets must be real symmetric positive definite matrices.
 #' @param without \code{list} -- if targets=="default" then this indicates which of the 
 #' default targets should be excluded from shrinkage. This can be useful
 #' when exploring the shrinkage behaviour with a subset of targets (e.g. 
@@ -36,6 +38,10 @@
 #' \item{logmarginals}{\code{matrix} -- the values of the log marginal 
 #'likelihood for each (target, alpha) pair. }
 #' }}
+#' @references Harry Gray, Gwenael G.R. Leday, Catalina A.
+#' Vallejos, Sylvia Richardson (submitted). Target-averaged
+#' linear Shrinkage: high dimensional covariance matrix
+#' estimation in functional genomics.
 #' @export
 #'
 #' @examples
@@ -61,11 +67,12 @@
 taShrink <- function(X, targets="default",  without=0,
                      alpha = seq(0.01, 0.99, 0.01), plots = TRUE, ext.data=FALSE)
 {
+  # input handling
   if(!is.numeric(X)){
     message("The data matrix must be numeric!")
     stop()
   }
-  if(targets!="default" || !is.array(targets)){
+  if(targets!="default" && !is.array(targets)){
     message("The targets must be either 'default' or an array!")
     stop()
   }

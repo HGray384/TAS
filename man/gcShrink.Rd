@@ -14,7 +14,8 @@ variables than observations.}
 
 \item{target}{\code{character} or \code{matrix} -- if "none" then a default
 target specified by \code{var} and \code{cor} will be used for shrinkage. If
-\code{matrix} then this will be used as the target for shrinkage.}
+\code{matrix} then this will be used as the target for shrinkage. The
+target must be a real symmetric positive definite matrix.}
 
 \item{var}{\code{numeric} -- c(1, 2, 3) variance structure for the target matrix.
 1 sets all variances equal to 1. 2 sets all variances equal to their sample mean.
@@ -33,9 +34,9 @@ comparison of estimation accuracy versus granularity is provided in ...}
 for each value of alpha with the value of alpha that maximises this highlighted.}
 
 \item{weighted}{\code{logical} -- if TRUE then average over all values of 
-alpha and their respective marginal likelihood value as in (Gray et al 2018). 
+alpha and their respective marginal likelihood value as in Gray et al (submitted). 
 If FALSE then only use the value of alpha that maximises the log-marginal likelihood
-as in (Hannart and Naveau 2014).}
+as in Hannart and Naveau (2014).}
 
 \item{ext.data}{\code{matrix} -- an external data matrix used a surrogate to estimate 
 the parameters in the default target set for X. Never recommended 
@@ -55,7 +56,8 @@ likelihood for each (target, alpha) pair. }
 }
 \description{
 Implements a Bayesian Gaussian conjugate (GC) single target linear shrinkage 
-covariance estimator as in (Gray et al 2018) and (Hannart & Naveau 2014). 
+covariance estimator as in Gray et al (submitted) (pre-print available upon
+request) and Hannart and Naveau (2014). 
 It is most useful when the observed data is high-dimensional 
 (more variables than observations) and allows a user-specified target matrix.
 }
@@ -68,4 +70,15 @@ t2 <- gcShrink(X, var=2, cor=2) # apply shrinkage and view likelihood for T2
 norm(t1$sigmahat-diag(10), type="F") # calculate loss
 norm(t2$sigmahat-diag(10), type="F") # calculate loss
 # one target clearly better but how to choose this a priori?
+}
+\references{
+Harry Gray, Gwenael G.R. Leday, Catalina A.
+Vallejos, Sylvia Richardson (submitted). Target-averaged
+linear Shrinkage: high dimensional covariance matrix
+estimation in functional genomics.
+
+Alexis Hannart and Philippe Naveau (2014). 
+Estimating high dimensional covariance matrices: 
+A new look at the Gaussian conjugate framework. 
+Journal of Multivariate Analysis.
 }

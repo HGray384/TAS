@@ -14,7 +14,8 @@ variables than observations.}
 
 \item{targets}{\code{character} or \code{array} -- "default" creates 
 a target set of common literature targets, or the user may specify an array
-of targets to use, e.g. ones that have been derived from external data.}
+of targets to use, e.g. ones that have been derived from external data. All
+targets must be real symmetric positive definite matrices.}
 
 \item{without}{\code{list} -- if targets=="default" then this indicates which of the 
 default targets should be excluded from shrinkage. This can be useful
@@ -47,8 +48,9 @@ likelihood for each (target, alpha) pair. }
 }
 \description{
 Implements a Bayesian target-averaged linear shrinkage covariance estimator
-as in (Gray et al 2018). It is most useful when the observed data is 
-high-dimensional (more variables than observations) and there are other 
+as in Gray et al (submitted) (pre-print available upon request).
+It is most useful when the observed data is high-dimensional 
+(more variables than observations) and there are other 
 datasets that can be used to include as prior data-driven targets to shrink 
 towards.
 }
@@ -72,4 +74,10 @@ norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
 
 
 
+}
+\references{
+Harry Gray, Gwenael G.R. Leday, Catalina A.
+Vallejos, Sylvia Richardson (submitted). Target-averaged
+linear Shrinkage: high dimensional covariance matrix
+estimation in functional genomics.
 }
