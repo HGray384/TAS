@@ -12,6 +12,7 @@ See documentation files for information on the usage of TAS.
 
 This version can be directly installed from the R console using:
 
-install.packages("devtools")
-
+```
+# install.packages("devtools")
 devtools::install_github("HGray384/TAS")
+```
