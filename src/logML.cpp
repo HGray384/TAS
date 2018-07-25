@@ -39,6 +39,10 @@ arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha) {
   arma::vec nu = beta * n + p + 1;
   arma::vec gammaTerm(a);
   arma::vec detTerm(a);
+  double val1;
+  double sign1;
+  double val2;
+  double sign2;
   
   // calculate the quotient of mvtgamma functions
   gammaTerm.zeros();
@@ -47,8 +51,10 @@ arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha) {
     for(int j = 0; j < p; j++){
       gammaTerm(r) += lgamma((nu(r) + n + (1- j))/2) - lgamma((nu(r) + (1- j))/2);
     }
-    detTerm(r) = nu(r) * log(arma::det(beta(r) * target));
-    detTerm(r) -= (nu(r) + n) * log(arma::det(beta(r) * target + S));
+    log_det(val1, sign1, beta(r) * target);
+    detTerm(r) = nu(r) * val1;
+    log_det(val2, sign2, beta(r) * target + S);
+    detTerm(r) -= (nu(r) + n) * val2;
   }
   detTerm/=2;
   

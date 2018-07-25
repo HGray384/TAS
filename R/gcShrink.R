@@ -67,64 +67,143 @@ gcShrink <- function(X, target="none", var=2, cor=1, alpha = seq(0.01, 0.99, 0.0
                      plots = TRUE, weighted=FALSE, ext.data=FALSE)
 {
   # input handling
+  # the data matrix X
   if(!is.numeric(X)){
-    message("The data matrix must be numeric!")
-    stop()
+    stop("X must be numeric!")
   }
+  if(is.null(dim(X)) || length(dim(X))!=2){
+    stop("X must have 2 dimensions.")
+  }
+  X <- as.matrix(X)
+  if(length(X)==1){
+    stop("X is a single number.")
+  }
+  if(any(is.na(X)) || any(is.nan(X))){
+    stop("X contains missing values, consider 
+         imputing these before performing shrinkage")
+  }
+  if(any(is.infinite(X))){
+    stop("X cannot contain infinite values!")
+  }
+  if(nrow(X)<ncol(X)){
+    warning("Shrinkage was designed for high-dimensional data analysis, but the 
+            number of variables (p) in your X is less than the number 
+            of samples (n). \n 
+            If you know that this warning is incorrect then likely you need to 
+            transpose X and run this again. Otherwise, know that
+            shrinkage might not be the most suitable method here. ")
+  }
+  # target input
   if(target!="none" && !is.matrix(target)){
-    message("The target must be either 'none' or a matrix!")
-    stop()
+    stop("The target must be either 'none' or a matrix!")
   }
-  if(!is.numeric(var)){
-    message("'var' must be numeric!")
-    stop()
-  } else if (!any(var==c(1, 2, 3))){
-    message("'var' must be in c(1, 2, 3)!")
+  if(is.matrix(target)){
+    if(dim(target)[1]!=dim(target)[2] || dim(target)[1]!=nrow(X)){
+      stop("Dimensions 1 and 2 of the target matrix must be equal to p.")
+    }
+    if(!is.numeric(target)){
+      stop("The target must be a numeric matrix.")
+    }
+    if(any(is.na(target)) || any(is.nan(target))){
+      stop("The supplied target matrix contains missing values.")
+    }
+    if(any(is.infinite(target))){
+      stop("The target matrix cannot contain infinite values!")
+    }
+    if(!isSymmetric.matrix(target)){
+      stop("The target matrix is not symmetric:
+           tested using isSymmetric.matrix().")
+    }
+    if(kappa(target, exact=TRUE)==0){
+      stop("T target matrix is not positive definite.")
+    }
+    if(kappa(target, exact=TRUE)>1e12){
+      stop("The target matrix is not positive definite.")
+    }
+    if(kappa(target, exact=TRUE)>1e4){
+      warning("The target matrix is ill-conditioned, all results
+              may contain numerical error.")
+    }
+  } else {
+    if(length(var)!=1){
+      stop("'var' must have length 1")
+    }
+    if(!is.numeric(var)){
+      stop("'var' must be numeric!")
+    }
+    if (!any(var==c(1, 2, 3))){
+      stop("'var' must be in c(1, 2, 3)!")
+    }
+    if(length(cor)!=1){
+      stop("'cor' must have length 1")
+    }
+    if(!is.numeric(cor)){
+      stop("'cor' must be numeric!")
+    }
+    if (!any(var==c(1, 2, 3))){
+      stop("'cor' must be in c(1, 2, 3)!")
+    }
   }
-  if(!is.numeric(cor)){
-    message("'cor' must be numeric!")
-    stop()
-  } else if (!any(var==c(1, 2, 3))){
-    message("'cor' must be in c(1, 2, 3)!")
-  }
+  # the alpha input
   if(!is.numeric(alpha)){
-    message("The shrinkage parameters 'alpha' must be numeric!")
-    stop()
+    stop("The shrinkage values 'alpha' must be numeric!")
+  }
+  if(any(is.na(alpha)) || any(is.nan(alpha))){
+    stop("alpha contains missing values, please re-specify")
+  }
+  if(any(is.infinite(alpha))){
+    stop("alpha cannot contain infinite values!")
   }
   if(any(alpha<=0) || any(alpha>=1)){
-    message("The shrinkage parameters must be within, and not inclusive of, (0, 1)!")
-    stop()
+    stop("The shrinkage parameters must be within, and not inclusive of, (0, 1)!")
+  }
+  alpha <- sort(alpha)
+  # the plot input
+  if(is.na(plots) || is.nan(plots)){
+    stop("'plots' is missing")
   }
   if(!is.logical(plots)){
-    message("'plots' must TRUE or FALSE!")
-    stop()
+    stop("'plots' must TRUE or FALSE!")
+  }
+  # the weighted input
+  if(is.na(weighted) || is.nan(weighted)){
+    stop("'weighted' is missing")
   }
   if(!is.logical(weighted)){
-    message("'weighted' must TRUE or FALSE!")
-    stop()
+    stop("'weighted' must TRUE or FALSE!")
   }
+  # the ext.data input
   if(is.logical(ext.data)){
     if(ext.data){
-      message("Instead of entering ext.data=TRUE,
-              set ext.data to be your external data matrix")
-      stop()
+      stop("Instead of entering ext.data=TRUE,
+             set ext.data to be your external data matrix")
     }
-  }else if(!is.numeric(ext.data)){
-    message("ext.data should either be your external 
-            data matrix, or FALSE")
-    stop()
+  } else {
+    if(!is.numeric(ext.data)){
+      stop("ext.data should either be your external 
+               data matrix, or FALSE")
+    }
+    if(nrow(ext.data)!=nrow(X)){
+      stop("ext.data should have the same number of rows as X.")
+    }
+    if(any(is.na(ext.data)) || any(is.nan(ext.data))){
+      stop("The external data matrix contains missing values, consider 
+               imputing these before running TAS")
+    }
+    if(any(is.infinite(ext.data))){
+      stop("The external data matrix cannot contain infinite values!")
+    }
   }
   # data dimensions
   n <- ncol(X)
   # p <- nrow(X)
   
   ## center the data
-  X <- as.matrix(X)
   X <- t(scale(t(X), scale=F, center=T))
   
   
   # if target not specified
-  if (is.character(target) && target=="none")
+  if (!is.matrix(target))
   {
     # get the target
     if(!ext.data){

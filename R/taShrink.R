@@ -64,44 +64,138 @@
 #' 
 #' 
 #' 
-taShrink <- function(X, targets="default",  without=0,
-                     alpha = seq(0.01, 0.99, 0.01), plots = TRUE, ext.data=FALSE)
+taShrink <- function(X, targets="default", without=0,
+                     alpha = seq(0.01, 0.99, 0.01), 
+                     plots = TRUE, ext.data=FALSE)
 {
-  # input handling
+  ## input handling
+  # the data matrix X
   if(!is.numeric(X)){
-    message("The data matrix must be numeric!")
-    stop()
+    stop("X must be numeric!")
   }
+  if(is.null(dim(X)) || length(dim(X))!=2){
+    stop("X must have 2 dimensions.")
+  }
+  X <- as.matrix(X)
+  if(length(X)==1){
+    stop("X is a single number.")
+  }
+  if(any(is.na(X)) || any(is.nan(X))){
+    stop("X contains missing values, consider 
+            imputing these before running TAS")
+  }
+  if(any(is.infinite(X))){
+    stop("X cannot contain infinite values!")
+  }
+  if(nrow(X)<ncol(X)){
+    warning("TAS was designed for high-dimensional data analysis, but the 
+            number of variables (p) in your X is less than the number 
+            of samples (n). \n 
+            If you know that this warning is incorrect then likely you need to 
+            transpose X and run TAS again. Otherwise, know that
+            TAS might not be the most suitable method here. ")
+  }
+  # the target input
   if(targets!="default" && !is.array(targets)){
-    message("The targets must be either 'default' or an array!")
-    stop()
+    stop("The targets must be either 'default' or an array!")
   }
-  if(!is.numeric(without)){
-    message("'without' must be numeric!")
-    stop()
+  if(is.array(targets)){
+    if(dim(targets)[1]!=dim(targets)[2] || dim(targets)[1]!=nrow(X)){
+      stop("Dimensions 1 and 2 of the 'targets' array must be equal to p.")
+    }
+    if(length(dim(targets))==2){
+      message("only 1 target matrix specified... redirecting to gcShrink")
+      return(gcShrink(X = X, target = targets, alpha = alpha, plots = plots,
+                      weighted = TRUE, ext.data = ext.data))
+    }
+    if(any(!apply(targets, 3, is.numeric))){
+      stop("The targets must be numeric matrices.")
+    }
+    if(any(is.na(targets)) || any(is.nan(targets))){
+      stop("The supplied target matrices contain missing values.")
+    }
+    if(any(is.infinite(targets))){
+      stop("The target matrices cannot contain infinite values!")
+    }
+    if(any(!apply(targets, 3, isSymmetric.matrix))){
+      stop("At least one target matrix is not symmetric:
+           tested using isSymmetric.matrix().")
+    }
+    if(any(apply(targets, 3, function(x){kappa(x, exact = TRUE)==0}))){
+      stop("At least one target matrix is not positive definite.")
+    }
+    if(any(apply(targets, 3, function(x){kappa(x, exact = TRUE)>1e12}))){
+      stop("At least one target matrix is not positive definite.")
+    }
+    if(any(apply(targets, 3, function(x){kappa(x, exact = TRUE)>1e4}))){
+      warning("At least one target matrix is ill-conditioned, all results
+              may contain numerical error.")
+    }
+  } else {
+    # the without input
+    if(!is.numeric(without)){
+      stop("'without' must be numeric!")
+    }
+    if(any(is.na(without)) || any(is.nan(without))){
+      stop("'without' contains missing values, please re-specify")
+    }
+    if(any(is.infinite(without))){
+      stop("'without' cannot contain infinite values!")
+    }
+    without <- unique(without)
+    without <- sort(intersect(without, 0:9))
+    if (length(without)>1 && any(without==0)){
+      without <- without[-which(without==0)]
+    }
+    if(length(without)==0){
+      stop("'without' must be at least one of 0:9.")
+    }
+    if(length(without)==9){
+      stop("'without' cannot be all of 1:9 - you will have no targets!")
+    }
   }
+  # the alpha input
   if(!is.numeric(alpha)){
-    message("The shrinkage parameters 'alpha' must be numeric!")
-    stop()
+    stop("The shrinkage values 'alpha' must be numeric!")
+  }
+  if(any(is.na(alpha)) || any(is.nan(alpha))){
+    stop("alpha contains missing values, please re-specify")
+  }
+  if(any(is.infinite(alpha))){
+    stop("alpha cannot contain infinite values!")
   }
   if(any(alpha<=0) || any(alpha>=1)){
-    message("The shrinkage parameters must be within, and not inclusive of, (0, 1)!")
-    stop()
+    stop("The shrinkage parameters must be within, and not inclusive of, (0, 1)!")
+  }
+  alpha <- sort(alpha)
+  # the plot input
+  if(is.na(plots) || is.nan(plots)){
+    stop("'plots' is missing")
   }
   if(!is.logical(plots)){
-    message("'plots' must TRUE or FALSE!")
-    stop()
+    stop("'plots' must TRUE or FALSE!")
   }
+  # the ext.data input
   if(is.logical(ext.data)){
     if(ext.data){
-     message("Instead of entering ext.data=TRUE,
+     stop("Instead of entering ext.data=TRUE,
              set ext.data to be your external data matrix")
-      stop()
     }
-  }else if(!is.numeric(ext.data)){
-    message("ext.data should either be your external 
+  } else {
+    if(!is.numeric(ext.data)){
+      stop("ext.data should either be your external 
             data matrix, or FALSE")
-    stop()
+    }
+    if(nrow(ext.data)!=nrow(X)){
+      stop("ext.data should have the same number of rows as X.")
+    }
+    if(any(is.na(ext.data)) || any(is.nan(ext.data))){
+      stop("The external data matrix contains missing values, consider 
+            imputing these before running TAS")
+    }
+    if(any(is.infinite(ext.data))){
+      stop("The external data matrix cannot contain infinite values!")
+    }
   }
   
   # data dimensions
@@ -109,11 +203,10 @@ taShrink <- function(X, targets="default",  without=0,
   p <- nrow(X)
   
   # center the data
-  X <- as.matrix(X)
   X <- t(scale(t(X), scale=F, center=T))
   
   # create target set
-  if (targets == "default")
+  if (!is.array(targets))
   {
     models <- array(0, dim = c(p, p, 9))
     if(!ext.data){
@@ -125,7 +218,7 @@ taShrink <- function(X, targets="default",  without=0,
       models <- getTargetSet(ext.data)
     }
     # remove unwanted targets
-    if (length(without) > 1)
+    if (without!=0)
     {
       models <- models[,,-without]
     }
@@ -138,22 +231,39 @@ taShrink <- function(X, targets="default",  without=0,
   
   
   # compute the log-marginal likelihood
-  logmargs <- t(apply(models, 3, function(x){logML(X=X, target=x, alpha=alpha)}))
+  logmargs <- t(apply(models, 3,
+                      function(x){logML(X=X, target=x, alpha=alpha)}))
+  
   # compute the posterior model weights
   weights <- exp(logmargs - matrixStats::logSumExp(logmargs))
+  
   # compute the shrinkage intensity weights
   shrinkageweights <- weights%*%alpha
+  
   # the weight allocated to the sample covariance
   sweight <- 1-sum(shrinkageweights)
-  shrinkageweights <- simplify2array(lapply(shrinkageweights, function(x){matrix(x, p, p)}))
+  shrinkageweights <- simplify2array(lapply(shrinkageweights,
+                                            function(x){matrix(x, p, p)}))
+  
   # compute the estimate
   sigmahat <- apply(shrinkageweights*models, c(1,2), sum)
   sigmahat <- sigmahat + (sweight*tcrossprod(X)/n)
   
   # make target-weight plot
   if (plots){
-    barplot(rowSums(weights)/sum(weights), names.arg = 1:dim(models)[3], main = "Distribution of target weights",
-            col = rainbow(dim(models)[3]), space = 0, xlab = "Target", ylab = "Weight")
+    if (!is.array(targets)){
+      if (length(which(without==0))==0){
+        nm <- c(1:9)[-without]
+      } else {
+        nm <- 1:dim(models)[3]
+      }
+    } else {
+      nm <- 1:dim(models)[3]
+    }
+    barplot(rowSums(weights)/sum(weights), names.arg = nm,
+            main = "Distribution of target weights",
+            col = rainbow(dim(models)[3]), space = 0, 
+            xlab = "Target", ylab = "Weight")
   }
   # return results
   list("sigmahat" = sigmahat, "targets" = models, "weights" = weights, "logmarginals" = logmargs)
