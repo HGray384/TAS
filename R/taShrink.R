@@ -37,6 +37,7 @@
 #' normalising the log-marginal likelihood values below. }
 #' \item{logmarginals}{\code{matrix} -- the values of the log marginal 
 #'likelihood for each (target, alpha) pair. }
+#' \item{alpha}{\code{list} -- the values of shrinkage intensities used.}
 #' }}
 #' @references Harry Gray, Gwenael G.R. Leday, Catalina A.
 #' Vallejos, Sylvia Richardson (submitted). Target-averaged
@@ -46,24 +47,25 @@
 #'
 #' @examples
 #' set.seed(101)
-#' X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
-#' X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
-#' tas <- taShrink(X) # apply shrinkage and view target weight bar plot
-#' abs(tas$sigmahat - diag(10)) # inspect absolute differences
-#' norm(tas$sigmahat-diag(10), type="F") # calculate loss
+# X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+# X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+# tas <- taShrink(X, plots = FALSE) # apply shrinkage and view target weight bar plot
+# barplot(targetWeights(tas), names.arg = c(1:9, "S"),
+# main = "Target-specific shrinkage weights",
+# col = rainbow(dim(tas$targets)[3]+1), space = 0,
+# xlab = "Target", ylab = "Weight")
+# abs(tas$sigmahat - diag(10)) # inspect absolute differences
+# norm(tas$sigmahat-diag(10), type="F") # calculate loss
 #' # compare this to each single target
-#' norm(gcShrink(X, var=1, cor=1)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=2, cor=1)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=3, cor=1)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=1, cor=2)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=2, cor=2)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=3, cor=2)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=1, cor=3)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=2, cor=3)$sigmahat-diag(10), type="F")
-#' norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
-#' 
-#' 
-#' 
+# norm(gcShrink(X, var=1, cor=1)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=2, cor=1)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=3, cor=1)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=1, cor=2)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=2, cor=2)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=3, cor=2)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=1, cor=3)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=2, cor=3)$sigmahat-diag(10), type="F")
+# norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
 taShrink <- function(X, targets="default", without=0,
                      alpha = seq(0.01, 0.99, 0.01), 
                      plots = TRUE, ext.data=FALSE)
@@ -242,11 +244,11 @@ taShrink <- function(X, targets="default", without=0,
   
   # the weight allocated to the sample covariance
   sweight <- 1-sum(shrinkageweights)
-  shrinkageweights <- simplify2array(lapply(shrinkageweights,
+  shrinkageweightslist <- simplify2array(lapply(shrinkageweights,
                                             function(x){matrix(x, p, p)}))
   
   # compute the estimate
-  sigmahat <- apply(shrinkageweights*models, c(1,2), sum)
+  sigmahat <- apply(shrinkageweightslist*models, c(1,2), sum)
   sigmahat <- sigmahat + (sweight*tcrossprod(X)/n)
   
   # make target-weight plot
@@ -260,11 +262,12 @@ taShrink <- function(X, targets="default", without=0,
     } else {
       nm <- 1:dim(models)[3]
     }
-    barplot(rowSums(weights)/sum(weights), names.arg = nm,
-            main = "Distribution of target weights",
-            col = rainbow(dim(models)[3]), space = 0, 
+    barplot(c(shrinkageweights, sweight), names.arg = c(nm, "S"),
+            main = "Target-specific shrinkage weights",
+            col = rainbow((dim(models)[3]+1)), space = 0, 
             xlab = "Target", ylab = "Weight")
   }
   # return results
-  list("sigmahat" = sigmahat, "targets" = models, "weights" = weights, "logmarginals" = logmargs)
+  list("sigmahat" = sigmahat, "targets" = models, "weights" = weights, 
+       "logmarginals" = logmargs, "alpha"=alpha)
 }

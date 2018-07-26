@@ -44,6 +44,7 @@ pair such that \code{sum(weights)=1}. The weights are calculated by
 normalising the log-marginal likelihood values below. }
 \item{logmarginals}{\code{matrix} -- the values of the log marginal 
 likelihood for each (target, alpha) pair. }
+\item{alpha}{\code{list} -- the values of shrinkage intensities used.}
 }}
 }
 \description{
@@ -56,24 +57,7 @@ towards.
 }
 \examples{
 set.seed(101)
-X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
-X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
-tas <- taShrink(X) # apply shrinkage and view target weight bar plot
-abs(tas$sigmahat - diag(10)) # inspect absolute differences
-norm(tas$sigmahat-diag(10), type="F") # calculate loss
 # compare this to each single target
-norm(gcShrink(X, var=1, cor=1)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=2, cor=1)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=3, cor=1)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=1, cor=2)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=2, cor=2)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=3, cor=2)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=1, cor=3)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=2, cor=3)$sigmahat-diag(10), type="F")
-norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
-
-
-
 }
 \references{
 Harry Gray, Gwenael G.R. Leday, Catalina A.
