@@ -13,6 +13,6 @@ Description: High-dimensional covariance matrix estimation
 License: GPL-3 | file LICENSE
 Imports: Rcpp (>= 0.12.13), matrixStats
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 URL: https://github.com/HGray384/TAS
 BugReports: https://github.com/HGray384/TAS/issues

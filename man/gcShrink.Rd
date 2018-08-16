@@ -4,8 +4,8 @@
 \alias{gcShrink}
 \title{Bayesian Gaussian conjugate (GC) single target linear shrinkage covariance estimator}
 \usage{
-gcShrink(X, target = "none", var = 2, cor = 1, alpha = seq(0.01, 0.99,
-  0.01), plots = TRUE, weighted = FALSE, ext.data = FALSE)
+gcShrink(X, target = "none", var = 2, cor = 1, alpha = seq(0.01,
+  0.99, 0.01), plots = TRUE, weighted = FALSE, ext.data = FALSE)
 }
 \arguments{
 \item{X}{\code{matrix} -- data matrix with variables in rows and 

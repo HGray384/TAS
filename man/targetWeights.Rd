@@ -10,8 +10,8 @@ targetWeights(TASoutput)
 \item{TASoutput}{\code{list} -- output from the taShrink function.}
 }
 \value{
-\code{list} -- the weights from each target matrix and the sample
-covariance matrix in the target-averaged linear shrinkage.
+\code{list} -- the weights from each target and sample
+covariance matrix in TAS.
 }
 \description{
 Extract the target-specific shrinkage weights from TAS output
