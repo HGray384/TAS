@@ -1,7 +1,7 @@
 #' Bayesian Target-Averaged linear Shrinkage (TAS) covariance estimator 
 #' 
 #' Implements a Bayesian target-averaged linear shrinkage covariance estimator
-#' as in Gray et al (submitted) (pre-print available upon request).
+#' as in Gray et al. (2018).
 #' It is most useful when the observed data is high-dimensional 
 #' (more variables than observations) and there are other 
 #' datasets that can be used to include as prior data-driven targets to shrink 
@@ -39,10 +39,9 @@
 #'likelihood for each (target, alpha) pair. }
 #' \item{alpha}{\code{list} -- the values of shrinkage intensities used.}
 #' }}
-#' @references Harry Gray, Gwenael G.R. Leday, Catalina A.
-#' Vallejos, Sylvia Richardson (submitted). Target-averaged
-#' linear Shrinkage: high dimensional covariance matrix
-#' estimation in functional genomics.
+#' @references Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
+#'  2018. Shrinkage estimation of large covariance matrices using 
+#'  multiple shrinkage targets. arXiv preprint arXiv:1809.08024.
 #' @export
 #'
 #' @examples
@@ -89,14 +88,14 @@ taShrink <- function(X, targets="default", without=0,
   if(any(is.infinite(X))){
     stop("X cannot contain infinite values!")
   }
-  if(nrow(X)<ncol(X)){
-    warning("TAS was designed for high-dimensional data analysis, but the 
-            number of variables (p) in your X is less than the number 
-            of samples (n). \n 
-            If you know that this warning is incorrect then likely you need to 
-            transpose X and run TAS again. Otherwise, know that
-            TAS might not be the most suitable method here. ")
-  }
+  # if(nrow(X)<ncol(X)){
+  #   warning("TAS was designed for high-dimensional data analysis, but the 
+  #           number of variables (p) in your X is less than the number 
+  #           of samples (n). \n 
+  #           If you know that this warning is incorrect then likely you need to 
+  #           transpose X and run TAS again. Otherwise, know that
+  #           TAS might not be the most suitable method here. ")
+  # }
   # the target input
   if(targets!="default" && !is.array(targets)){
     stop("The targets must be either 'default' or an array!")

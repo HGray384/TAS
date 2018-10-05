@@ -49,7 +49,7 @@ likelihood for each (target, alpha) pair. }
 }
 \description{
 Implements a Bayesian target-averaged linear shrinkage covariance estimator
-as in Gray et al (submitted) (pre-print available upon request).
+as in Gray et al. (2018).
 It is most useful when the observed data is high-dimensional 
 (more variables than observations) and there are other 
 datasets that can be used to include as prior data-driven targets to shrink 
@@ -78,8 +78,7 @@ norm(gcShrink(X, var=2, cor=3)$sigmahat-diag(10), type="F")
 norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
 }
 \references{
-Harry Gray, Gwenael G.R. Leday, Catalina A.
-Vallejos, Sylvia Richardson (submitted). Target-averaged
-linear Shrinkage: high dimensional covariance matrix
-estimation in functional genomics.
+Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
+ 2018. Shrinkage estimation of large covariance matrices using 
+ multiple shrinkage targets. arXiv preprint arXiv:1809.08024.
 }

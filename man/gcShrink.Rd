@@ -56,8 +56,7 @@ likelihood for each (target, alpha) pair. }
 }
 \description{
 Implements a Bayesian Gaussian conjugate (GC) single target linear shrinkage 
-covariance estimator as in Gray et al (submitted) (pre-print available upon
-request) and Hannart and Naveau (2014). 
+covariance estimator as in Gray et al. (2018)  and Hannart and Naveau (2014). 
 It is most useful when the observed data is high-dimensional 
 (more variables than observations) and allows a user-specified target matrix.
 }
@@ -72,13 +71,11 @@ norm(t2$sigmahat-diag(10), type="F") # calculate loss
 # one target clearly better but how to choose this a priori?
 }
 \references{
-Harry Gray, Gwenael G.R. Leday, Catalina A.
-Vallejos, Sylvia Richardson (submitted). Target-averaged
-linear Shrinkage: high dimensional covariance matrix
-estimation in functional genomics.
+Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
+ 2018. Shrinkage estimation of large covariance matrices using 
+ multiple shrinkage targets. arXiv preprint arXiv:1809.08024.
 
-Alexis Hannart and Philippe Naveau (2014). 
-Estimating high dimensional covariance matrices: 
-A new look at the Gaussian conjugate framework. 
-Journal of Multivariate Analysis.
+Hannart, A. and Naveau, P., 2014. Estimating high dimensional 
+covariance matrices: A new look at the Gaussian conjugate framework. 
+Journal of Multivariate Analysis, 131, pp.149-162.
 }
