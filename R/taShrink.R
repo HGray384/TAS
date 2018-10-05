@@ -39,9 +39,9 @@
 #'likelihood for each (target, alpha) pair. }
 #' \item{alpha}{\code{list} -- the values of shrinkage intensities used.}
 #' }}
-#' @references Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
+#' @references Gray, H., Leday, G.G.R., Vallejos, C.A. and Richardson, S.,
 #'  2018. Shrinkage estimation of large covariance matrices using 
-#'  multiple shrinkage targets. arXiv preprint arXiv:1809.08024.
+#'  multiple shrinkage targets. arXiv preprint <arXiv:1809.08024>.
 #' @export
 #'
 #' @examples
