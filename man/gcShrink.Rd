@@ -73,7 +73,7 @@ norm(t2$sigmahat-diag(10), type="F") # calculate loss
 \references{
 Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
  2018. Shrinkage estimation of large covariance matrices using 
- multiple shrinkage targets. arXiv preprint arXiv:1809.08024.
+ multiple shrinkage targets. arXiv preprint <arXiv:1809.08024>.
 
 Hannart, A. and Naveau, P., 2014. Estimating high dimensional 
 covariance matrices: A new look at the Gaussian conjugate framework. 

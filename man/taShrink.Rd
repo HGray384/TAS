@@ -78,7 +78,7 @@ norm(gcShrink(X, var=2, cor=3)$sigmahat-diag(10), type="F")
 norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
 }
 \references{
-Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
+Gray, H., Leday, G.G.R., Vallejos, C.A. and Richardson, S.,
  2018. Shrinkage estimation of large covariance matrices using 
- multiple shrinkage targets. arXiv preprint arXiv:1809.08024.
+ multiple shrinkage targets. arXiv preprint <arXiv:1809.08024>.
 }
