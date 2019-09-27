@@ -22,3 +22,22 @@ These nine targets consist of the combinations of variance and correlation
  sample; correlation structures are zero, sample mean, and
 autocorrelation.
 }
+\examples{
+  set.seed(102)
+  X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+  X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+  ts <- getTargetSet(X) # an array of targets
+  # inspect the variances of the targets
+  vars <- apply(ts, 3, diag)
+  colnames(vars) <- paste("target", c(1:9), sep="")
+  vars
+  boxplot(vars, ylab = "variances")
+  # inspect the correlations of the targets
+  corrs <- apply(ts, 3, function(x){cov2cor(x)[lower.tri(x)]})
+  colnames(corrs) <- paste("target", c(1:9), sep="")
+  corrs
+  boxplot(corrs, ylab = "correlations")
+}
+\seealso{
+\code{\link{taShrink}}
+}

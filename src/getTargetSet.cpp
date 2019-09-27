@@ -14,6 +14,22 @@ using namespace Rcpp;
 //' observations in columns.
 //' @return \code{array} -- a \code{p}x\code{p}x9 array of
 //' target matrices, where \code{p} is the number of variables of \code{X}.
+//' @seealso \code{\link{taShrink}}
+//' @examples
+//'   set.seed(102)
+//'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+//'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+//'   ts <- getTargetSet(X) # an array of targets
+//'   # inspect the variances of the targets
+//'   vars <- apply(ts, 3, diag)
+//'   colnames(vars) <- paste("target", c(1:9), sep="")
+//'   vars
+//'   boxplot(vars, ylab = "variances")
+//'   # inspect the correlations of the targets
+//'   corrs <- apply(ts, 3, function(x){cov2cor(x)[lower.tri(x)]})
+//'   colnames(corrs) <- paste("target", c(1:9), sep="")
+//'   corrs
+//'   boxplot(corrs, ylab = "correlations")
 // [[Rcpp::export]]
 arma::cube getTargetSet(arma::mat X) {
   //std::cout << "Before quantities!" << "\n";

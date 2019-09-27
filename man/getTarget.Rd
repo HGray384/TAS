@@ -34,3 +34,15 @@ These targets consist of a combination of variance and correlation
  sample. Possible correlation structures are zero, sample mean, and
   autocorrelation.
 }
+\examples{
+  set.seed(102)
+  X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+  X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+  getTarget(X, varNumber = 1, corNumber = 1) # unit variance, zero correlation
+  getTarget(X, varNumber = 2, corNumber = 1) # equal variance, zero correlation
+  getTarget(X, varNumber = 3, corNumber = 1) # sample variances, zero correlation
+
+}
+\seealso{
+\code{\link{gcShrink}}
+}

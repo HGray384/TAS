@@ -41,7 +41,7 @@
 #' }}
 #' @references Gray, H., Leday, G.G.R., Vallejos, C.A. and Richardson, S.,
 #'  2018. Shrinkage estimation of large covariance matrices using 
-#'  multiple shrinkage targets. arXiv preprint <arXiv:1809.08024>.
+#'  multiple shrinkage targets. \href{https://arxiv.org/abs/1809.08024}{arXiv preprint}.
 #' @export
 #'
 #' @examples
@@ -97,7 +97,12 @@ taShrink <- function(X, targets="default", without=0,
   #           TAS might not be the most suitable method here. ")
   # }
   # the target input
-  if(targets!="default" && !is.array(targets)){
+  if(is.character(targets)){
+    if (targets!="default"){
+      stop("If 'targets' is a character, it must be 'default'")
+    }
+  }
+  if(!is.character(targets) && !is.array(targets)){
     stop("The targets must be either 'default' or an array!")
   }
   if(is.array(targets)){

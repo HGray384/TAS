@@ -4,16 +4,17 @@ Title: Target-Averaged Linear Shrinkage (TAS)
 Version: 1.0
 Date: 2018-06-01
 Author: Harry Gray
-Maintainer: Harry Gray <harry.gray@mrc-bsu.cam.ac.uk>
+Maintainer: Harry Gray <h.w.gray@dundee.ac.uk>
 Description: High-dimensional covariance matrix estimation
   using linear shrinkage with multiple target matrices Gray, H.,
   Leday, G.G.R., Vallejos, C.A. and Richardson, S.,
-  (2018) <arXiv:1809.08024>. Multiple targets can be useful when 
+  (2018) <arXiv:1809.08024>.
+  Multiple targets can be useful when 
   there is uncertainty around the choice of target or if there is
   external data that can be used to construct a target matrix.
 License: GPL-3 | file LICENSE
 Imports: Rcpp (>= 0.12.13), matrixStats
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 URL: https://github.com/HGray384/TAS
 BugReports: https://github.com/HGray384/TAS/issues

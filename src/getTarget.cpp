@@ -25,6 +25,14 @@ using namespace Rcpp;
 //' structure with parameter equal to the sample mean (using \code{X}).
 //' @return \code{matrix} -- target matrix for linear shrinkage
 //'  estimation.
+//' @seealso \code{\link{gcShrink}}
+//' @examples
+//'   set.seed(102)
+//'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+//'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+//'   getTarget(X, varNumber = 1, corNumber = 1) # unit variance, zero correlation
+//'   getTarget(X, varNumber = 2, corNumber = 1) # equal variance, zero correlation
+//'   getTarget(X, varNumber = 3, corNumber = 1) # sample variances, zero correlation
 //'
 // [[Rcpp::export]]
 arma::mat getTarget(arma::mat X, int varNumber = 2, int corNumber = 1) {

@@ -21,11 +21,21 @@ using namespace Rcpp;
 //'  (\code{target}, \code{alpha}). If \code{alpha} is a vector is a vector
 //'  then the function returns a vector evaluated at each element of 
 //'  \code{alpha}.
-//'
+//' @seealso \code{\link{gcShrink}}, \code{\link{taShrink}}
+//' @examples
+//'   set.seed(102)
+//'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+//'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+//'   target <- getTarget(X)
+//'   alpha <- seq(0.01, 0.99, 0.01)
+//'   lml <- logML(X, target, alpha)
+//'   plot(alpha, lml, col = 'blue', pch = 16,
+//'   ylab = "log marginal likelihoods", xlab = expression(alpha))
+//'   lines(x = rep(alpha[which(lml==max(lml))], 2), y = c(min(lml), max(lml)), col='red')
 //' @references Alexis Hannart and Philippe Naveau (2014). 
 //' Estimating high dimensional covariance matrices: 
 //' A new look at the Gaussian conjugate framework. 
-//' Journal of Multivariate Analysis.
+//' Journal of Multivariate Analysis. \href{http://dx.doi.org/10.1016/j.jmva.2014.06.001}{doi}.
 // [[Rcpp::export]]
 arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha) {
   

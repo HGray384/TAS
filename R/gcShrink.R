@@ -44,11 +44,12 @@
 #' }}
 #' @references Gray, H., Leday, G.G., Vallejos, C.A. and Richardson, S.,
 #'  2018. Shrinkage estimation of large covariance matrices using 
-#'  multiple shrinkage targets. arXiv preprint <arXiv:1809.08024>.
+#'  multiple shrinkage targets. \href{https://arxiv.org/abs/1809.08024}{arXiv preprint}.
 #' 
 #' Hannart, A. and Naveau, P., 2014. Estimating high dimensional 
 #' covariance matrices: A new look at the Gaussian conjugate framework. 
-#' Journal of Multivariate Analysis, 131, pp.149-162.
+#' Journal of Multivariate Analysis, 131, pp.149-162. 
+#' \href{http://dx.doi.org/10.1016/j.jmva.2014.06.001}{doi}.
 #' @export
 #'
 #' @examples
@@ -91,7 +92,12 @@ gcShrink <- function(X, target="none", var=2, cor=1, alpha = seq(0.01, 0.99, 0.0
             shrinkage might not be the most suitable method here. ")
   }
   # target input
-  if(target!="none" && !is.matrix(target)){
+  if(is.character(target)){
+    if (target!="none"){
+      stop("If 'target' is a character, it must be 'none'")
+    }
+  }
+  if(!is.character(target) && !is.matrix(target)){
     stop("The target must be either 'none' or a matrix!")
   }
   if(is.matrix(target)){

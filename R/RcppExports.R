@@ -25,6 +25,14 @@
 #' structure with parameter equal to the sample mean (using \code{X}).
 #' @return \code{matrix} -- target matrix for linear shrinkage
 #'  estimation.
+#' @seealso \code{\link{gcShrink}}
+#' @examples
+#'   set.seed(102)
+#'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+#'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+#'   getTarget(X, varNumber = 1, corNumber = 1) # unit variance, zero correlation
+#'   getTarget(X, varNumber = 2, corNumber = 1) # equal variance, zero correlation
+#'   getTarget(X, varNumber = 3, corNumber = 1) # sample variances, zero correlation
 #'
 getTarget <- function(X, varNumber = 2L, corNumber = 1L) {
     .Call('_TAS_getTarget', PACKAGE = 'TAS', X, varNumber, corNumber)
@@ -43,6 +51,22 @@ getTarget <- function(X, varNumber = 2L, corNumber = 1L) {
 #' observations in columns.
 #' @return \code{array} -- a \code{p}x\code{p}x9 array of
 #' target matrices, where \code{p} is the number of variables of \code{X}.
+#' @seealso \code{\link{taShrink}}
+#' @examples
+#'   set.seed(102)
+#'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+#'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+#'   ts <- getTargetSet(X) # an array of targets
+#'   # inspect the variances of the targets
+#'   vars <- apply(ts, 3, diag)
+#'   colnames(vars) <- paste("target", c(1:9), sep="")
+#'   vars
+#'   boxplot(vars, ylab = "variances")
+#'   # inspect the correlations of the targets
+#'   corrs <- apply(ts, 3, function(x){cov2cor(x)[lower.tri(x)]})
+#'   colnames(corrs) <- paste("target", c(1:9), sep="")
+#'   corrs
+#'   boxplot(corrs, ylab = "correlations")
 getTargetSet <- function(X) {
     .Call('_TAS_getTargetSet', PACKAGE = 'TAS', X)
 }
@@ -67,11 +91,21 @@ getTargetSet <- function(X) {
 #'  (\code{target}, \code{alpha}). If \code{alpha} is a vector is a vector
 #'  then the function returns a vector evaluated at each element of 
 #'  \code{alpha}.
-#'
+#' @seealso \code{\link{gcShrink}}, \code{\link{taShrink}}
+#' @examples
+#'   set.seed(102)
+#'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
+#'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
+#'   target <- getTarget(X)
+#'   alpha <- seq(0.01, 0.99, 0.01)
+#'   lml <- logML(X, target, alpha)
+#'   plot(alpha, lml, col = 'blue', pch = 16,
+#'   ylab = "log marginal likelihoods", xlab = expression(alpha))
+#'   lines(x = rep(alpha[which(lml==max(lml))], 2), y = c(min(lml), max(lml)), col='red')
 #' @references Alexis Hannart and Philippe Naveau (2014). 
 #' Estimating high dimensional covariance matrices: 
 #' A new look at the Gaussian conjugate framework. 
-#' Journal of Multivariate Analysis.
+#' Journal of Multivariate Analysis. \href{http://dx.doi.org/10.1016/j.jmva.2014.06.001}{doi}.
 logML <- function(X, target, alpha) {
     .Call('_TAS_logML', PACKAGE = 'TAS', X, target, alpha)
 }
