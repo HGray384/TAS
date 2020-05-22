@@ -2,7 +2,7 @@
 % Please edit documentation in R/addTarget.R
 \name{addTarget}
 \alias{addTarget}
-\title{Add a new target to TAS without re-running taShrink()}
+\title{Add a new target to TAS without re-running \code{taShrink}}
 \usage{
 addTarget(X, TASoutput, NEWtarget)
 }
@@ -21,7 +21,7 @@ estimation. Must have the same dimensions as the other targets.}
  to the target set.
 }
 \description{
-Add a new target to TAS without re-running taShrink()
+Add a new target to TAS without re-running \code{taShrink}
 }
 \examples{
  set.seed(102)

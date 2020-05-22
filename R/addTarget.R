@@ -1,4 +1,4 @@
-#' Add a new target to TAS without re-running taShrink()
+#' Add a new target to TAS without re-running \code{taShrink}
 #'
 #' @param X \code{matrix} -- data matrix with variables in rows and 
 #' observations in columns. This method performs best when there are more 

@@ -7,7 +7,7 @@
 targetWeights(TASoutput)
 }
 \arguments{
-\item{TASoutput}{\code{list} -- output from the taShrink function.}
+\item{TASoutput}{\code{list} -- output from the \code{taShrink} function.}
 }
 \value{
 \code{list} -- the weights from each target and sample

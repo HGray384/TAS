@@ -1,6 +1,6 @@
 #' Extract the target-specific and sample covariance shrinkage weights from TAS output
 #'
-#' @param TASoutput \code{list} -- output from the taShrink function.
+#' @param TASoutput \code{list} -- output from the \code{taShrink} function.
 #'
 #' @return \code{list} -- the weights from each target and sample
 #' covariance matrix in TAS.
