@@ -40,10 +40,10 @@ using namespace Rcpp;
 arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha) {
   
   // useful quantities
-  const float n = X.n_cols;
-  const float p = X.n_rows;
-  const float a = alpha.n_elem;
-  const float constTerm = ((n * p) / 2) * log(n * arma::datum::pi);
+  const double n = X.n_cols;
+  const double p = X.n_rows;
+  const double a = alpha.n_elem;
+  const double constTerm = ((n * p) / 2) * log(n * arma::datum::pi);
   arma::mat S = X * X.t() / n;
   arma::vec beta = alpha / (1-alpha);
   arma::vec nu = beta * n + p + 1;
@@ -58,7 +58,7 @@ arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha) {
   gammaTerm.zeros();
   detTerm.zeros();
   for (int r = 0; r < a; r++){
-    for(int j = 0; j < p; j++){
+    for(int j = 1; j < (p+1); j++){
       gammaTerm(r) += lgamma((nu(r) + n + (1- j))/2) - lgamma((nu(r) + (1- j))/2);
     }
     log_det(val1, sign1, beta(r) * target);
