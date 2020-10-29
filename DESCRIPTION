@@ -2,7 +2,7 @@ Package: TAS
 Type: Package
 Title: Target-Averaged Linear Shrinkage (TAS)
 Version: 1.0
-Date: 2019-09-27
+Date: 2020-10-29
 Author: Harry Gray
 Maintainer: Harry Gray <h.w.gray@dundee.ac.uk>
 Description: High-dimensional covariance matrix estimation
