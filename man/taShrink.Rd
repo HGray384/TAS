@@ -4,8 +4,14 @@
 \alias{taShrink}
 \title{Bayesian Target-Averaged linear Shrinkage (TAS) covariance estimator}
 \usage{
-taShrink(X, targets = "default", without = 0, alpha = seq(0.01, 0.99,
-  0.01), plots = TRUE, ext.data = FALSE)
+taShrink(
+  X,
+  targets = "default",
+  without = 0,
+  alpha = seq(0.01, 0.99, 0.01),
+  plots = TRUE,
+  ext.data = FALSE
+)
 }
 \arguments{
 \item{X}{\code{matrix} -- data matrix with variables in rows and 
