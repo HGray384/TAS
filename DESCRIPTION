@@ -1,9 +1,10 @@
 Package: TAS
 Type: Package
 Title: Target-Averaged Linear Shrinkage (TAS)
-Version: 1.0
+Version: 1.0.1
 Date: 2020-10-29
-Author: Harry Gray
+Author: Harry Gray [cre, aut], Gwenael G.R. Leday [ctb]
+Authors@R: c(person("Harry","Gray", role=c("cre", "aut"), email="h.w.gray@dundee.ac.uk"), person("Gwenael G.R.","Leday", role = "ctb"))
 Maintainer: Harry Gray <h.w.gray@dundee.ac.uk>
 Description: High-dimensional covariance matrix estimation
   using linear shrinkage with multiple target matrices Gray, H.,
@@ -14,7 +15,7 @@ Description: High-dimensional covariance matrix estimation
   external data that can be used to construct a target matrix.
 License: GPL-3 | file LICENSE
 Imports: Rcpp (>= 0.12.13), matrixStats
-LinkingTo: Rcpp, RcppArmadillo
+LinkingTo: Rcpp, RcppArmadillo, BH
 RoxygenNote: 7.1.1
 URL: https://github.com/HGray384/TAS
 BugReports: https://github.com/HGray384/TAS/issues
