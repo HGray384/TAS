@@ -27,6 +27,7 @@
 #' the parameters in the default target set for X. Never recommended 
 #' unless there is a belief that ext.data is informative of the covariances of
 #'  X. 
+#' @param testml \code{logical} -- is the test logML being used?
 #'
 #' @return {\code{list} --
 #' \describe{
@@ -67,7 +68,7 @@
 #' norm(gcShrink(X, var=3, cor=3)$sigmahat-diag(10), type="F")
 taShrink <- function(X, targets="default", without=0,
                      alpha = seq(0.01, 0.99, 0.01), 
-                     plots = TRUE, ext.data=FALSE)
+                     plots = TRUE, ext.data=FALSE, testml=FALSE)
 {
   ## input handling
   # the data matrix X
@@ -112,7 +113,7 @@ taShrink <- function(X, targets="default", without=0,
     if(length(dim(targets))==2){
       message("only 1 target matrix specified... redirecting to gcShrink")
       return(gcShrink(X = X, target = targets, alpha = alpha, plots = plots,
-                      weighted = TRUE, ext.data = ext.data))
+                      weighted = TRUE, ext.data = ext.data, testml = testml))
     }
     if(any(!apply(targets, 3, is.numeric))){
       stop("The targets must be numeric matrices.")
@@ -237,8 +238,14 @@ taShrink <- function(X, targets="default", without=0,
   
   
   # compute the log-marginal likelihood
-  logmargs <- t(apply(models, 3,
-                      function(x){logML(X=X, target=x, alpha=alpha)}))
+  if (testml){
+    logmargs <- t(apply(models, 3,
+                        function(x){logMLtest(X=t(X), target=x)$gridAlpha[,3]}))
+    alpha <- seq(0.01, 0.99, length.out = 100)
+  } else {
+    logmargs <- t(apply(models, 3,
+                        function(x){logML(X=X, target=x, alpha=alpha)}))
+  }
   
   # compute the posterior model weights
   weights <- exp(logmargs - matrixStats::logSumExp(logmargs))
