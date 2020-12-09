@@ -95,8 +95,8 @@ getTargetSet <- function(X) {
 #'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
 #'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
 #'   target <- getTarget(X)
-#'   alpha <- seq(0.01, 0.99, 0.01)
-#'   lml <- logMLtest(X, target, alpha)
+#'   alpha <- seq(0.01, 0.99, length.out=100)
+#'   lml <- logML(X, target, alpha)
 #'   plot(alpha, lml, col = 'blue', pch = 16,
 #'   ylab = "log marginal likelihoods", xlab = expression(alpha))
 #'   lines(x = rep(alpha[which(lml==max(lml))], 2), y = c(min(lml), max(lml)), col='red')
@@ -106,46 +106,7 @@ getTargetSet <- function(X) {
 #' Journal of Multivariate Analysis. \href{http://dx.doi.org/10.1016/j.jmva.2014.06.001}{doi}.
 NULL
 
-logMLtest <- function(X, target) {
-    .Call('_TAS_logMLtest', PACKAGE = 'TAS', X, target)
-}
-
-#' Log-marginal likelihood of a Gaussian-inverse Wishart
-#' conjugate model
-#' 
-#' Evaluate the log-marginal likelihood of a Gaussian-inverse Wishart
-#' distribution parametrised in terms of its prior mean matrix and its
-#' prior variance parameter. In the Bayesian linear shrinkage model,
-#' these parameters correspond to the target matrix and the shrinkage
-#' intensity (Hannart and Naveau, 2014). 
-#' 
-#' 
-#' @param X \code{matrix} --data matrix with variables in rows and 
-#' observations in columns.
-#' @param target \code{matrix} -- prior mean matrix parameter of the
-#' inverse-Wishart distribution. 
-#' @param alpha \code{numeric} -- prior variance parameter of the
-#' inverse-Wishart distribution. 
-#' @return \code{numeric} -- log-marginal likelihood evaluated at
-#'  (\code{target}, \code{alpha}). If \code{alpha} is a vector is a vector
-#'  then the function returns a vector evaluated at each element of 
-#'  \code{alpha}.
-#' @seealso \code{\link{gcShrink}}, \code{\link{taShrink}}
-#' @examples
-#'   set.seed(102)
-#'   X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
-#'   X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
-#'   target <- getTarget(X)
-#'   alpha <- seq(0.01, 0.99, 0.01)
-#'   lml <- logML(X, target, alpha)
-#'   plot(alpha, lml, col = 'blue', pch = 16,
-#'   ylab = "log marginal likelihoods", xlab = expression(alpha))
-#'   lines(x = rep(alpha[which(lml==max(lml))], 2), y = c(min(lml), max(lml)), col='red')
-#' @references Alexis Hannart and Philippe Naveau (2014). 
-#' Estimating high dimensional covariance matrices: 
-#' A new look at the Gaussian conjugate framework. 
-#' Journal of Multivariate Analysis. \href{http://dx.doi.org/10.1016/j.jmva.2014.06.001}{doi}.
-logML <- function(X, target, alpha) {
-    .Call('_TAS_logML', PACKAGE = 'TAS', X, target, alpha)
+logML <- function(X, target) {
+    .Call('_TAS_logML', PACKAGE = 'TAS', X, target)
 }
 
