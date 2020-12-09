@@ -17,7 +17,7 @@
 #'  X <- matrix(rnorm(50), 10, 5) # p=10, n=5, identity covariance
 #'  X <- t(scale(t(X), center=TRUE, scale=FALSE)) # mean 0
 #'  targets <- getTargetSet(X)[,,c(1, 4, 7)] # use unit variance targets
-#'  alpha <- seq(0.01, 0.99, 0.01)
+#'  alpha <- seq(0.01, 0.99, length.out=100)
 #'  tas <- taShrink(X, targets = targets[,,c(1, 3)], plots = FALSE)
 #'  tw1 <- targetWeights(tas)
 #'  barplot(tw1, names.arg = c("target1", "target2", "S"),
@@ -49,7 +49,7 @@ addTarget <- function(X, TASoutput, NEWtarget){
                       weighted = TRUE, ext.data = FALSE)$logmarg
   oldMarg <- TASoutput$logmarginals
   # add them to the old ones
-  newMarg <- rbind(oldMarg, t(addMarg))
+  newMarg <- rbind(oldMarg, t(addMarg$gridAlpha[,3]))
   
   # calculate new posterior model weights
   weights <- exp(newMarg - matrixStats::logSumExp(newMarg))
