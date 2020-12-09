@@ -30,28 +30,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// logMLtest
-List logMLtest(arma::mat X, arma::mat target);
-RcppExport SEXP _TAS_logMLtest(SEXP XSEXP, SEXP targetSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type target(targetSEXP);
-    rcpp_result_gen = Rcpp::wrap(logMLtest(X, target));
-    return rcpp_result_gen;
-END_RCPP
-}
 // logML
-arma::vec logML(arma::mat X, arma::mat target, arma::vec alpha);
-RcppExport SEXP _TAS_logML(SEXP XSEXP, SEXP targetSEXP, SEXP alphaSEXP) {
+List logML(arma::mat X, arma::mat target);
+RcppExport SEXP _TAS_logML(SEXP XSEXP, SEXP targetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type target(targetSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(logML(X, target, alpha));
+    rcpp_result_gen = Rcpp::wrap(logML(X, target));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -59,8 +46,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_TAS_getTarget", (DL_FUNC) &_TAS_getTarget, 3},
     {"_TAS_getTargetSet", (DL_FUNC) &_TAS_getTargetSet, 1},
-    {"_TAS_logMLtest", (DL_FUNC) &_TAS_logMLtest, 2},
-    {"_TAS_logML", (DL_FUNC) &_TAS_logML, 3},
+    {"_TAS_logML", (DL_FUNC) &_TAS_logML, 2},
     {NULL, NULL, 0}
 };
 
