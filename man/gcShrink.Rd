@@ -12,8 +12,7 @@ gcShrink(
   alpha = seq(0.01, 0.99, 0.01),
   plots = TRUE,
   weighted = FALSE,
-  ext.data = FALSE,
-  testml = FALSE
+  ext.data = FALSE
 )
 }
 \arguments{
@@ -51,8 +50,6 @@ as in Hannart and Naveau (2014).}
 the parameters in the default target set for X. Never recommended 
 unless there is a belief that ext.data is informative of the covariances of
  X.}
-
-\item{testml}{\code{logical} -- is the test logML being used?}
 }
 \value{
 {\code{list} --

@@ -10,8 +10,7 @@ taShrink(
   without = 0,
   alpha = seq(0.01, 0.99, 0.01),
   plots = TRUE,
-  ext.data = FALSE,
-  testml = FALSE
+  ext.data = FALSE
 )
 }
 \arguments{
@@ -40,8 +39,6 @@ shrinkage weights. Recommend option FALSE if using many iterations.}
 the parameters in the default target set for X. Never recommended 
 unless there is a belief that ext.data is informative of the covariances of
  X.}
-
-\item{testml}{\code{logical} -- is the test logML being used?}
 }
 \value{
 {\code{list} --
