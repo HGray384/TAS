@@ -32,7 +32,6 @@
 #' the parameters in the default target set for X. Never recommended 
 #' unless there is a belief that ext.data is informative of the covariances of
 #'  X.
-#' @param testml \code{logical} -- is the test logML being used?
 #'
 #' @return {\code{list} --
 #' \describe{
@@ -63,7 +62,7 @@
 #' norm(t2$sigmahat-diag(10), type="F") # calculate loss
 #' # one target clearly better but how to choose this a priori?
 gcShrink <- function(X, target="none", var=2, cor=1, alpha = seq(0.01, 0.99, 0.01),
-                     plots = TRUE, weighted=FALSE, ext.data=FALSE, testml=FALSE)
+                     plots = TRUE, weighted=FALSE, ext.data=FALSE)
 {
   # input handling
   # the data matrix X
@@ -221,30 +220,16 @@ gcShrink <- function(X, target="none", var=2, cor=1, alpha = seq(0.01, 0.99, 0.0
   }
   
   # compute log marginals
-  if (testml){
-    logmarg <- logMLtest(t(X), target)
-  } else {
-    logmarg <- logML(X, target, alpha)
-  }
+  logmarg <- logML(t(X), target)
   
   # max of these gives optimal alpha
-  if (testml){
-    optimalpha <- logmarg$alphaOpt
-    if (plots){
-      plot(logmarg$gridAlpha[,2], logmarg$gridAlpha[,3], col = 'blue', pch = 16,
-           ylab = "log marginal likelihoods", xlab = expression(alpha))
-      
-      lines(x = rep(optimalpha, 2), y = c(min(logmarg$gridAlpha[,3]), 
-                                          max(logmarg$gridAlpha[,3])), col='red')
-    }
-  } else{
-    optimalpha <- alpha[which(logmarg==max(logmarg))]
-    if (plots){
-      plot(alpha, logmarg, col = 'blue', pch = 16,
-           ylab = "log marginal likelihoods", xlab = expression(alpha))
-      
-      lines(x = rep(optimalpha, 2), y = c(min(logmarg), max(logmarg)), col='red')
-    }
+  optimalpha <- logmarg$alphaOpt
+  if (plots){
+    plot(logmarg$gridAlpha[,2], logmarg$gridAlpha[,3], col = 'blue', pch = 16,
+         ylab = "log marginal likelihoods", xlab = expression(alpha))
+    
+    lines(x = rep(optimalpha, 2), y = c(min(logmarg$gridAlpha[,3]), 
+                                        max(logmarg$gridAlpha[,3])), col='red')
   }
   
   # compute the estimate
@@ -253,13 +238,9 @@ gcShrink <- function(X, target="none", var=2, cor=1, alpha = seq(0.01, 0.99, 0.0
     sigmahat <- ((1 - optimalpha) * tcrossprod(X)/n) + (optimalpha * target)
   } else {
     # weight each value of alpha
-    if (testml){
-      marg <- exp(logmarg$gridAlpha[,3] - matrixStats::logSumExp(logmarg$gridAlpha[,3]))
-      weights <- logmarg$gridAlpha[,2]*marg
-    } else {
-      marg <- exp(logmarg - matrixStats::logSumExp(logmarg))
-      weights <- alpha*marg
-    }
+    marg <- exp(logmarg$gridAlpha[,3] - matrixStats::logSumExp(logmarg$gridAlpha[,3]))
+    weights <- logmarg$gridAlpha[,2]*marg
+    
     sigmahat <- ((1-sum(weights))*tcrossprod(X)/n) + (sum(weights)*target)
   }
   
